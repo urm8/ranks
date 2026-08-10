@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ranks.fullname" . }}-api
+  labels:
+    {{- include "ranks.labels" . | nindent 4 }}
+    app.kubernetes.io/component: api
+spec:
+  replicas: {{ .Values.ranks.api.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "ranks.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: api
+  template:
+    metadata:
+      labels:
+        {{- include "ranks.labels" . | nindent 8 }}
+        app.kubernetes.io/component: api
+    spec:
+      {{- with .Values.ranks.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.ranks.podSecurityContext | nindent 8 }}
+      containers:
+        - name: api
+          securityContext:
+            {{- toYaml .Values.ranks.securityContext | nindent 12 }}
+          image: "{{ .Values.ranks.api.image.repository }}:{{ .Values.ranks.api.image.tag }}"
+          imagePullPolicy: {{ .Values.ranks.api.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.ranks.api.service.port }}
+          env:
+            - name: PORT
+              value: {{ .Values.ranks.api.service.port | quote }}
+            - name: RANKS_CORS_ORIGINS
+              value: {{ .Values.ranks.env.RANKS_CORS_ORIGINS | quote }}
+            - name: RANKS_DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "ranks.fullname" . }}-db
+                  key: host
+            - name: RANKS_DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "ranks.fullname" . }}-db
+                  key: port
+            - name: RANKS_DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "ranks.fullname" . }}-db
+                  key: dbname
+            - name: RANKS_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "ranks.fullname" . }}-db
+                  key: user
+            - name: RANKS_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "ranks.fullname" . }}-db
+                  key: password
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          {{- with .Values.ranks.api.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}

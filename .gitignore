@@ -1,0 +1,13 @@
+.venv/
+node_modules/
+dist/
+__pycache__/
+*.py[cod]
+.DS_Store
+hetzner-k3s_kubeconfig.yaml
+chart/values.yaml
+**/values_override.yaml
+.env
+.pytest_cache/
+.ruff_cache/
+*.egg-info/

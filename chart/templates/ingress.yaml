@@ -1,0 +1,47 @@
+{{- if .Values.ranks.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "ranks.fullname" . }}
+  labels:
+    {{- include "ranks.labels" . | nindent 4 }}
+  {{- with .Values.ranks.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- with .Values.ranks.ingress.className }}
+  ingressClassName: {{ . }}
+  {{- end }}
+  {{- if .Values.ranks.ingress.tls }}
+  tls:
+    - hosts:
+        - {{ .Values.ranks.ingress.host | quote }}
+      secretName: {{ .Values.ranks.ingress.tlsSecretName }}
+  {{- end }}
+  rules:
+    - host: {{ .Values.ranks.ingress.host | quote }}
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "ranks.fullname" . }}-api
+                port:
+                  number: {{ .Values.ranks.api.service.port }}
+          - path: /healthz
+            pathType: Exact
+            backend:
+              service:
+                name: {{ include "ranks.fullname" . }}-api
+                port:
+                  number: {{ .Values.ranks.api.service.port }}
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "ranks.fullname" . }}-web
+                port:
+                  number: {{ .Values.ranks.web.service.port }}
+{{- end }}

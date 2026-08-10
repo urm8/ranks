@@ -1,0 +1,20 @@
+{
+  "data": {
+    "children": [
+      {
+        "data": {
+          "title": "Best coding LLM? anthropic/claude-sonnet-4 and openai/gpt-5 crush deepseek/deepseek-v3",
+          "selftext": "Also like qwen/qwen3-235b and meta-llama/llama-4",
+          "url": ""
+        }
+      },
+      {
+        "data": {
+          "title": "Local vs API: mistralai/mistral-large vs google/gemini-2.5-pro",
+          "selftext": "",
+          "url": ""
+        }
+      }
+    ]
+  }
+}

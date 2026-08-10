@@ -1,0 +1,3 @@
+# Standalone package (prevents parent package.json hijacks).
+packages:
+  - .

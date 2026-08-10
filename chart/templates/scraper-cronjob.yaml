@@ -1,0 +1,98 @@
+{{- if .Values.ranks.scraperCron.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "ranks.fullname" . }}-scraper
+  labels:
+    {{- include "ranks.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.ranks.scraperCron.schedule | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: {{ .Values.ranks.scraperCron.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.ranks.scraperCron.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: {{ .Values.ranks.scraperCron.activeDeadlineSeconds }}
+      backoffLimit: 1
+      template:
+        metadata:
+          labels:
+            {{- include "ranks.labels" . | nindent 12 }}
+            app.kubernetes.io/component: scraper
+        spec:
+          restartPolicy: OnFailure
+          {{- with .Values.ranks.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                      - key: node-role.kubernetes.io/control-plane
+                        operator: DoesNotExist
+          securityContext:
+            {{- toYaml .Values.ranks.podSecurityContext | nindent 12 }}
+          containers:
+            - name: scraper
+              securityContext:
+                {{- toYaml .Values.ranks.securityContext | nindent 16 }}
+              image: "{{ .Values.ranks.scraperCron.image.repository }}:{{ .Values.ranks.scraperCron.image.tag }}"
+              imagePullPolicy: {{ .Values.ranks.scraperCron.image.pullPolicy }}
+              {{- with .Values.ranks.scraperCron.args }}
+              args:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              env:
+                - name: HOME
+                  value: /tmp
+                - name: RANKS_SCRAPE_OUT_DIR
+                  value: /data/scrapes
+                - name: RANKS_SCRAPY_LOG_LEVEL
+                  value: {{ .Values.ranks.scraperCron.logLevel | quote }}
+                - name: RANKS_SCRAPY_DOWNLOAD_TIMEOUT
+                  value: {{ .Values.ranks.env.RANKS_FETCH_TIMEOUT_SECONDS | quote }}
+                - name: PLAYWRIGHT_BROWSERS_PATH
+                  value: /ms-playwright
+                - name: RANKS_DB_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "ranks.fullname" . }}-db
+                      key: host
+                - name: RANKS_DB_PORT
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "ranks.fullname" . }}-db
+                      key: port
+                - name: RANKS_DB_NAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "ranks.fullname" . }}-db
+                      key: dbname
+                - name: RANKS_DB_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "ranks.fullname" . }}-db
+                      key: user
+                - name: RANKS_DB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "ranks.fullname" . }}-db
+                      key: password
+              volumeMounts:
+                - name: scrapes
+                  mountPath: /data/scrapes
+                - name: tmp
+                  mountPath: /tmp
+              {{- with .Values.ranks.scraperCron.resources }}
+              resources:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+          volumes:
+            - name: scrapes
+              emptyDir:
+                sizeLimit: {{ .Values.ranks.scraperCron.scrapeVolumeSizeLimit | quote }}
+            - name: tmp
+              emptyDir: {}
+{{- end }}

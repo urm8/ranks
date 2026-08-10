@@ -1,0 +1,99 @@
+# Example chart values (safe to commit). Copy to values.yaml and fill locally:
+#   cp values.example.yaml values.yaml
+ranks:
+  nameOverride: ""
+  fullnameOverride: ""
+  imagePullSecrets: []
+
+  podSecurityContext: {}
+  securityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 1000
+    capabilities:
+      drop:
+        - ALL
+
+  env:
+    RANKS_CORS_ORIGINS: "https://ranks.urm8.org"
+    RANKS_FETCH_TIMEOUT_SECONDS: "45"
+    RANKS_REFRESH_DEADLINE_SECONDS: "240"
+    RANKS_BENCHMARK_MAX_AGE_DAYS: "365"
+
+  database:
+    host: "" # e.g. postgres.<namespace>.svc.cluster.local
+    port: "5432"
+    name: ranks
+    user: ranks
+    password: ""
+    adminNamespace: ""
+    adminUser: postgres
+    adminSecretName: ""
+    adminSecretKey: postgres-password
+    initJob:
+      image:
+        repository: postgres
+        tag: "16-alpine"
+        pullPolicy: IfNotPresent
+
+  api:
+    replicaCount: 1
+    image:
+      repository: ghcr.io/urm8/ranks-api
+      tag: latest
+      pullPolicy: IfNotPresent
+    service:
+      port: 8080
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
+  web:
+    replicaCount: 1
+    image:
+      repository: ghcr.io/urm8/ranks-web
+      tag: latest
+      pullPolicy: IfNotPresent
+    service:
+      port: 8080
+    resources:
+      requests:
+        cpu: 25m
+        memory: 64Mi
+      limits:
+        cpu: 200m
+        memory: 128Mi
+
+  ingress:
+    enabled: true
+    className: nginx
+    host: ranks.urm8.org
+    annotations: {}
+    tls: true
+    tlsSecretName: ranks-urm8-org-tls
+
+  scraperCron:
+    enabled: false
+    schedule: "5 3 * * *"
+    image:
+      repository: ghcr.io/urm8/ranks-scraper
+      tag: latest
+      pullPolicy: IfNotPresent
+    args: ["--out", "/data/scrapes"]
+    logLevel: INFO
+    activeDeadlineSeconds: 1800
+    scrapeVolumeSizeLimit: 2Gi
+    successfulJobsHistoryLimit: 3
+    failedJobsHistoryLimit: 3
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        cpu: "1"
+        memory: 2Gi

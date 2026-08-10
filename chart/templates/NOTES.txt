@@ -1,0 +1,15 @@
+ranks.urm8.org (Svelte SPA + FastAPI)
+
+  URL: https://{{ .Values.ranks.ingress.host }}
+  API:  {{ include "ranks.fullname" . }}-api:{{ .Values.ranks.api.service.port }}
+  Web:  {{ include "ranks.fullname" . }}-web:{{ .Values.ranks.web.service.port }}
+  DB:   {{ .Values.ranks.database.name }}@{{ .Values.ranks.database.host }}
+  Scraper CronJob: {{ if .Values.ranks.scraperCron.enabled }}enabled ({{ .Values.ranks.scraperCron.schedule }}){{ else }}disabled{{ end }}
+
+Legacy note: cluster/ranks_chart/scripts/app.py is not deployed by this chart.
+
+Validate:
+  kubectl -n {{ .Release.Namespace }} rollout status deploy/{{ include "ranks.fullname" . }}-api
+  kubectl -n {{ .Release.Namespace }} rollout status deploy/{{ include "ranks.fullname" . }}-web
+  curl -sS https://{{ .Values.ranks.ingress.host }}/healthz
+  curl -sS https://{{ .Values.ranks.ingress.host }}/api/data | head

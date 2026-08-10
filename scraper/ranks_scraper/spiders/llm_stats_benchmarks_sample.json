@@ -1,0 +1,590 @@
+[
+  {
+    "benchmark_id": "aa-briefcase",
+    "name": "AA-Briefcase",
+    "description": "AA-Briefcase is an Artificial Analysis evaluation of AI systems on professional knowledge-work tasks, reported as an Elo score.",
+    "categories": [
+      "productivity",
+      "reasoning",
+      "agents"
+    ],
+    "modality": "text",
+    "max_score": 3000.0,
+    "verified": false,
+    "model_count": 1,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "aa-index",
+    "name": "AA-Index",
+    "description": "No official academic documentation found for this benchmark. Extensive research through ArXiv, IEEE/ACL/NeurIPS papers, and university research sites yielded no peer-reviewed sources for an 'aa-index' benchmark. This entry requires verification from official academic sources.",
+    "categories": [
+      "general"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 3,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "aa-lcr",
+    "name": "AA-LCR",
+    "description": "Agent Arena Long Context Reasoning benchmark",
+    "categories": [
+      "reasoning",
+      "long_context"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 15,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "aa-omniscience-index",
+    "name": "AA-Omniscience Index",
+    "description": "AA-Omniscience Index is Artificial Analysis's knowledge-reliability metric. It rewards correct answers, penalizes hallucinations, and does not penalize abstention. Scores range from -100 to 100, where 0 means as many correct as incorrect answers.",
+    "categories": [
+      "reasoning",
+      "science",
+      "knowledge"
+    ],
+    "modality": "text",
+    "max_score": 200.0,
+    "verified": false,
+    "model_count": 1,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "acebench",
+    "name": "ACEBench",
+    "description": "ACEBench is a comprehensive benchmark for evaluating Large Language Models' tool usage capabilities across three primary evaluation types: Normal (basic tool usage scenarios), Special (tool usage with ambiguous or incomplete instructions), and Agent (multi-agent interactions simulating real-world dialogues). The benchmark covers 4,538 APIs across 8 major domains and 68 sub-domains including technology, finance, entertainment, society, health, culture, and environment, supporting both English and Chinese languages.",
+    "categories": [
+      "reasoning",
+      "finance",
+      "general",
+      "healthcare",
+      "tool_calling"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 2,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "activitynet",
+    "name": "ActivityNet",
+    "description": "A large-scale video benchmark for human activity understanding. Provides samples from 203 activity classes with an average of 137 untrimmed videos per class and 1.41 activity instances per video, for a total of 849 video hours. The benchmark covers a wide range of complex human activities that are of interest to people in their daily living and can be used to compare algorithms for three scenarios: untrimmed video classification, trimmed activity classification, and activity detection.",
+    "categories": [
+      "video",
+      "vision"
+    ],
+    "modality": "video",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 1,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "advancedif",
+    "name": "AdvancedIF",
+    "description": "AdvancedIF is a rubric-based benchmark measuring complex, multi-turn, and system-prompted instruction following ability, scored with a calibrated LLM judge against per-instruction rubrics.",
+    "categories": [
+      "reasoning",
+      "instruction_following",
+      "general"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 2,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "aethercode",
+    "name": "AetherCode",
+    "description": "AetherCode is a competitive-programming benchmark of olympiad-level algorithmic coding problems.",
+    "categories": [
+      "reasoning",
+      "coding"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 2,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "agents-last-exam",
+    "name": "Agents' Last Exam",
+    "description": "Agents' Last Exam is a challenging benchmark for AI agents on hard, long-horizon tasks that test sustained reasoning, planning, and tool use, reported with and without tool access.",
+    "categories": [
+      "reasoning",
+      "agents",
+      "tool_calling"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 5,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "agent-startup-bench",
+    "name": "Agent Startup Bench",
+    "description": "Agent Startup Bench measures AI agents on high-economic-value, startup-style tasks that require autonomous planning and execution to deliver practical, verifiable results.",
+    "categories": [
+      "reasoning",
+      "general",
+      "agents"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 2,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "agieval",
+    "name": "AGIEval",
+    "description": "A human-centric benchmark for evaluating foundation models on standardized exams including college entrance exams (Gaokao, SAT), law school admission tests (LSAT), math competitions, lawyer qualification tests, and civil service exams. Contains 20 tasks (18 multiple-choice, 2 cloze) designed to assess understanding, knowledge, reasoning, and calculation abilities in real-world academic and professional contexts.",
+    "categories": [
+      "math",
+      "reasoning",
+      "legal",
+      "general"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 10,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "ai2d",
+    "name": "AI2D",
+    "description": "AI2D is a dataset of 4,903 illustrative diagrams from grade school natural sciences (such as food webs, human physiology, and life cycles) with over 15,000 multiple choice questions and answers. The benchmark evaluates diagram understanding and visual reasoning capabilities, requiring models to interpret diagrammatic elements, relationships, and structure to answer questions about scientific concepts represented in visual form.",
+    "categories": [
+      "multimodal",
+      "reasoning",
+      "vision"
+    ],
+    "modality": "multimodal",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 32,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "ai2-reasoning-challenge-(arc)",
+    "name": "AI2 Reasoning Challenge (ARC)",
+    "description": "A dataset of 7,787 genuine grade-school level, multiple-choice science questions assembled to encourage research in advanced question-answering. The dataset is partitioned into a Challenge Set and Easy Set, where the Challenge Set contains only questions answered incorrectly by both retrieval-based and word co-occurrence algorithms. Covers multiple scientific domains including biology, physics, earth science, and chemistry, requiring scientific reasoning, causal understanding, and conceptual knowledge beyond simple fact retrieval. Includes a supporting corpus of over 14 million science sentences.",
+    "categories": [
+      "reasoning",
+      "general"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 1,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "aider",
+    "name": "Aider",
+    "description": "Aider is a comprehensive code editing benchmark based on 133 practice exercises from Exercism's Python repository, designed to evaluate AI models' ability to translate natural language coding requests into executable code that passes unit tests. The benchmark measures end-to-end code editing capabilities, including GPT's ability to edit existing code and format code changes for automated saving to local files. The Aider Polyglot variant extends this evaluation across 225 challenging exercises spanning C++, Go, Java, JavaScript, Python, and Rust, making it a standard benchmark for assessing multilingual code editing performance in AI research.",
+    "categories": [
+      "reasoning",
+      "code"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 4,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "aider-polyglot",
+    "name": "Aider-Polyglot",
+    "description": "A coding benchmark that evaluates LLMs on 225 challenging Exercism programming exercises across C++, Go, Java, JavaScript, Python, and Rust. Models receive two attempts to solve each problem, with test error feedback provided after the first attempt if it fails. The benchmark measures both initial problem-solving ability and capacity to edit code based on error feedback, providing an end-to-end evaluation of code generation and editing capabilities across multiple programming languages.",
+    "categories": [
+      "general",
+      "code"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 22,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "aider-polyglot-edit",
+    "name": "Aider-Polyglot Edit",
+    "description": "A challenging multi-language coding benchmark that evaluates models' code editing abilities across C++, Go, Java, JavaScript, Python, and Rust. Contains 225 of Exercism's most difficult programming problems, selected as problems that were solved by 3 or fewer out of 7 top coding models. The benchmark focuses on code editing tasks and measures both correctness of solutions and proper edit format usage. Designed to re-calibrate evaluation scales so top models score between 5-50%.",
+    "categories": [
+      "general",
+      "code"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 10,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "aime",
+    "name": "AIME",
+    "description": "American Invitational Mathematics Examination (AIME) benchmark for evaluating mathematical reasoning capabilities of large language models. Contains 30 challenging mathematical problems from AIME 2024 competition that require multi-step reasoning and advanced mathematical insight. Each problem has an integer answer between 000-999.",
+    "categories": [
+      "math",
+      "reasoning"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 2,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "aime-2024",
+    "name": "AIME 2024",
+    "description": "American Invitational Mathematics Examination 2024, consisting of 30 challenging mathematical reasoning problems from AIME I and AIME II competitions. Each problem requires an integer answer between 0-999 and tests advanced mathematical reasoning across algebra, geometry, combinatorics, and number theory. Used as a benchmark for evaluating mathematical reasoning capabilities in large language models at Olympiad-level difficulty.",
+    "categories": [
+      "math",
+      "reasoning"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 53,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "aime-2025",
+    "name": "AIME 2025",
+    "description": "All 30 problems from the 2025 American Invitational Mathematics Examination (AIME I and AIME II), testing olympiad-level mathematical reasoning with integer answers from 000-999. Used as an AI benchmark to evaluate large language models' ability to solve complex mathematical problems requiring multi-step logical deductions and structured symbolic reasoning.",
+    "categories": [
+      "math",
+      "reasoning"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 114,
+    "is_community": true,
+    "dataset_slug": "aime-2025",
+    "dataset_org_id": "1fa61e5b-539e-4be7-a0e2-1aacf0310fc8",
+    "dataset_id": "beca24d4-218c-44b5-936b-a0753688e7d2",
+    "star_count": 0,
+    "version_count": 1,
+    "subset_count": 1,
+    "latest_version_row_count": 30,
+    "size_bytes": 11906,
+    "updated_at": "2026-06-05T18:58:33.640132+00:00"
+  },
+  {
+    "benchmark_id": "aime-2026",
+    "name": "AIME 2026",
+    "description": "All 30 problems from the 2026 American Invitational Mathematics Examination (AIME I and AIME II), testing olympiad-level mathematical reasoning with integer answers from 000-999. Used as an AI benchmark to evaluate large language models' ability to solve complex mathematical problems requiring multi-step logical deductions and structured symbolic reasoning.",
+    "categories": [
+      "math",
+      "reasoning"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 17,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "air-bench",
+    "name": "AIR-Bench",
+    "description": "AIR-Bench 2024 is a safety benchmark grounded in risk categories derived from government regulations and company policies. It evaluates policy-grounded refusal across a broad regulatory and policy-derived harm taxonomy, using category-specific LLM-judge prompts that reward safe engagement rather than only penalizing unsafe responses.",
+    "categories": [
+      "safety"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 1,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "aitz-em",
+    "name": "AITZ_EM",
+    "description": "Android-In-The-Zoo (AitZ) benchmark for evaluating autonomous GUI agents on smartphones. Contains 18,643 screen-action pairs with chain-of-action-thought annotations spanning over 70 Android apps. Designed to connect perception (screen layouts and UI elements) with cognition (action decision-making) for natural language-triggered smartphone task completion.",
+    "categories": [
+      "multimodal",
+      "reasoning",
+      "agents"
+    ],
+    "modality": "multimodal",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 3,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "alignbench",
+    "name": "AlignBench",
+    "description": "AlignBench is a comprehensive multi-dimensional benchmark for evaluating Chinese alignment of Large Language Models. It contains 8 main categories: Fundamental Language Ability, Advanced Chinese Understanding, Open-ended Questions, Writing Ability, Logical Reasoning, Mathematics, Task-oriented Role Play, and Professional Knowledge. The benchmark includes 683 real-scenario rooted queries with human-verified references and uses a rule-calibrated multi-dimensional LLM-as-Judge approach with Chain-of-Thought for evaluation.",
+    "categories": [
+      "math",
+      "reasoning",
+      "roleplay",
+      "language",
+      "general",
+      "creativity",
+      "writing"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 4,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "alpacaeval-2.0",
+    "name": "AlpacaEval 2.0",
+    "description": "AlpacaEval 2.0 is a length-controlled automatic evaluator for instruction-following language models that uses GPT-4 Turbo to assess model responses against a baseline. It evaluates models on 805 diverse instruction-following tasks including creative writing, classification, programming, and general knowledge questions. The benchmark achieves 0.98 Spearman correlation with ChatBot Arena while being fast (< 3 minutes) and affordable (< $10 in OpenAI credits). It addresses length bias in automatic evaluation through length-controlled win-rates and uses weighted scoring based on response quality.",
+    "categories": [
+      "reasoning",
+      "general",
+      "creativity",
+      "writing"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 4,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "amc-2022-23",
+    "name": "AMC_2022_23",
+    "description": "American Mathematics Competition problems from the 2022-23 academic year, consisting of multiple-choice mathematics competition problems designed for high school students. These problems require advanced mathematical reasoning, problem-solving strategies, and mathematical knowledge covering topics like algebra, geometry, number theory, and combinatorics. The benchmark is derived from the official AMC competitions sponsored by the Mathematical Association of America.",
+    "categories": [
+      "math",
+      "reasoning"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 6,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "amo-bench",
+    "name": "AMO Bench",
+    "description": "AMO Bench is an olympiad-level mathematics benchmark that evaluates advanced mathematical problem-solving and multi-step reasoning on competition-style problems.",
+    "categories": [
+      "math",
+      "reasoning"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 1,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "android-control-high-em",
+    "name": "Android Control High_EM",
+    "description": "Android device control benchmark using high exact match evaluation metric for assessing agent performance on mobile interface tasks",
+    "categories": [
+      "multimodal",
+      "reasoning"
+    ],
+    "modality": "multimodal",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 3,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "android-control-low-em",
+    "name": "Android Control Low_EM",
+    "description": "Android control benchmark evaluating autonomous agents on mobile device interaction tasks with low exact match scoring criteria",
+    "categories": [
+      "multimodal",
+      "reasoning"
+    ],
+    "modality": "multimodal",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 3,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "androidworld",
+    "name": "AndroidWorld",
+    "description": "AndroidWorld evaluates an agent's ability to operate in real Android GUI environments, completing multi-step tasks by perceiving screen content and executing touch/type actions.",
+    "categories": [
+      "agents",
+      "vision"
+    ],
+    "modality": "multimodal",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 4,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "androidworld-sr",
+    "name": "AndroidWorld_SR",
+    "description": "AndroidWorld Success Rate (SR) benchmark - A dynamic benchmarking environment for autonomous agents operating on Android devices. Evaluates agents on 116 programmatic tasks across 20 real-world Android apps using multimodal inputs (screen screenshots, accessibility trees, and natural language instructions). Measures success rate of agents completing tasks like sending messages, creating calendar events, and navigating mobile interfaces. Published at ICLR 2025. Best current performance: 30.6% success rate (M3A agent) vs 80.0% human performance.",
+    "categories": [
+      "multimodal",
+      "reasoning",
+      "general",
+      "agents"
+    ],
+    "modality": "multimodal",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 8,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "apex",
+    "name": "Apex",
+    "description": "Apex is a challenging frontier reasoning benchmark testing advanced multi-step problem solving across difficult STEM and logical tasks.",
+    "categories": [
+      "reasoning"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 2,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "apex-agents",
+    "name": "APEX-Agents",
+    "description": "APEX-Agents is a benchmark evaluating AI agents on long horizon professional tasks that require sustained reasoning, planning, and execution across complex multi-step workflows.",
+    "categories": [
+      "reasoning",
+      "agents"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 7,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "api-bank",
+    "name": "API-Bank",
+    "description": "A comprehensive benchmark for tool-augmented LLMs that evaluates API planning, retrieval, and calling capabilities. Contains 314 tool-use dialogues with 753 API calls across 73 API tools, designed to assess how effectively LLMs can utilize external tools and overcome obstacles in tool leveraging.",
+    "categories": [
+      "reasoning",
+      "tool_calling"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 3,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "arc",
+    "name": "Arc",
+    "description": "The Abstraction and Reasoning Corpus (ARC) is a benchmark designed to measure human-like general fluid intelligence through grid-based reasoning tasks. It consists of 800 tasks (400 training, 400 evaluation) where each task presents input-output grids that require understanding abstract patterns and transformations. Test-takers must produce exactly correct output grids for all test inputs in a task to solve it, with 3 trials allowed per test input. ARC aims to enable fair comparisons of general intelligence between AI systems and humans using priors designed to be as close as possible to innate human priors.",
+    "categories": [
+      "reasoning",
+      "general"
+    ],
+    "modality": "multimodal",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 1,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "arc-agi",
+    "name": "ARC-AGI",
+    "description": "The Abstraction and Reasoning Corpus for Artificial General Intelligence (ARC-AGI) is a benchmark designed to test general intelligence and abstract reasoning capabilities through visual grid-based transformation tasks. Each task consists of 2-5 demonstration pairs showing input grids transformed into output grids according to underlying rules, with test-takers required to infer these rules and apply them to novel test inputs. The benchmark uses colored grids (up to 30x30) with 10 discrete colors/symbols, designed to measure human-like general fluid intelligence and skill-acquisition efficiency with minimal prior knowledge.",
+    "categories": [
+      "reasoning",
+      "spatial_reasoning",
+      "vision"
+    ],
+    "modality": "image",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 7,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "arcagi2",
+    "name": "ArcAGI2",
+    "description": "ARC-AGI-2 is the second-generation Abstraction and Reasoning Corpus benchmark measuring fluid, general reasoning and abstraction.",
+    "categories": [
+      "reasoning"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 2,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "arc-agi-3",
+    "name": "ARC-AGI-3",
+    "description": "ARC-AGI-3 is the third-generation Abstraction and Reasoning Corpus benchmark, an interactive-reasoning evaluation designed to measure fluid, novel problem-solving ability that remains far from saturated for frontier models.",
+    "categories": [
+      "reasoning",
+      "general"
+    ],
+    "modality": "multimodal",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 4,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "arc-agi-v2",
+    "name": "ARC-AGI v2",
+    "description": "ARC-AGI-2 is an upgraded benchmark for measuring abstract reasoning and problem-solving abilities in AI systems through visual grid transformation tasks. It evaluates fluid intelligence via input-output grid pairs (1x1 to 30x30) using colored cells (0-9), requiring models to identify underlying transformation rules from demonstration examples and apply them to test cases. Designed to be easy for humans but challenging for AI, focusing on core cognitive abilities like spatial reasoning, pattern recognition, and compositional generalization.",
+    "categories": [
+      "reasoning",
+      "spatial_reasoning",
+      "vision"
+    ],
+    "modality": "multimodal",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 16,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "arc-c",
+    "name": "ARC-C",
+    "description": "The AI2 Reasoning Challenge (ARC) Challenge Set is a multiple-choice question-answering benchmark containing grade-school level science questions that require advanced reasoning capabilities. ARC-C specifically contains questions that were answered incorrectly by both retrieval-based and word co-occurrence algorithms, making it a particularly challenging subset designed to test commonsense reasoning abilities in AI systems.",
+    "categories": [
+      "reasoning",
+      "general"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 34,
+    "is_community": false
+  },
+  {
+    "benchmark_id": "arc-e",
+    "name": "ARC-E",
+    "description": "ARC-E (AI2 Reasoning Challenge - Easy Set) is a subset of grade-school level, multiple-choice science questions that requires knowledge and reasoning capabilities. Part of the AI2 Reasoning Challenge dataset containing 5,197 questions that test scientific reasoning and factual knowledge. The Easy Set contains questions that are answerable by retrieval-based and word co-occurrence algorithms, making them more accessible than the Challenge Set.",
+    "categories": [
+      "reasoning",
+      "general"
+    ],
+    "modality": "text",
+    "max_score": 1.0,
+    "verified": false,
+    "model_count": 8,
+    "is_community": false
+  }
+]
