@@ -42,6 +42,7 @@ jobs:
           KUBECONFIG_B64: ${{ secrets.KUBECONFIG_B64 }}
           RANKS_CHART_VALUES_B64: ${{ secrets.RANKS_CHART_VALUES_B64 }}
           RANKS_DB_PASSWORD: ${{ secrets.RANKS_DB_PASSWORD }}
+          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
         run: |
           missing=0
           if [ -z "$KUBECONFIG_B64" ]; then
@@ -50,6 +51,10 @@ jobs:
           fi
           if [ -z "$RANKS_CHART_VALUES_B64" ]; then
             echo "::error::Missing chart values secret"
+            missing=1
+          fi
+          if [ -z "$GHCR_TOKEN" ]; then
+            echo "::error::Missing GHCR_TOKEN secret (needs write:packages)"
             missing=1
           fi
           if [ -z "$RANKS_DB_PASSWORD" ]; then
@@ -81,7 +86,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GHCR_TOKEN }}
 
       - name: Build and push API image
         uses: docker/build-push-action@v6

@@ -71,7 +71,7 @@ ranks:
 
   ingress:
     enabled: true
-    className: nginx
+    className: haproxy
     host: ranks.urm8.org
     annotations: {}
     tls: true
