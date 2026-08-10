@@ -299,7 +299,11 @@ class SourceSpider(scrapy.Spider):
 
     def parse(self, response):
         started = response.meta.get("source_started", time.time())
-        body = response.text
+        try:
+            body = response.text
+        except AttributeError:
+            # Binary payloads (xlsx, etc.) — parsers should use response.body.
+            body = ""
         parsed: dict = {}
         error = None
         try:
@@ -318,6 +322,7 @@ class SourceSpider(scrapy.Spider):
             len(models),
         )
 
+        body_bytes = getattr(response, "body", b"") or b""
         yield FetchedSourceItem(
             name=self.source_title,
             url=response.url,
@@ -327,7 +332,7 @@ class SourceSpider(scrapy.Spider):
             ok=error is None and response.status < 400,
             status=response.status,
             body=body if self.store_body else "",
-            bytes=len(body.encode("utf-8", "replace")),
+            bytes=len(body_bytes),
             elapsed_ms=int((time.time() - started) * 1000),
             fetched_at=utc_now_iso(),
             source_date=header_date(response.headers, "Last-Modified", "Date"),

@@ -171,7 +171,9 @@ def build_snapshot(fetched: list[dict]) -> dict[str, Any]:
             {
                 "id": cat["id"],
                 "title": cat["title"],
+                "name": cat["title"],
                 "summary": cat["summary"],
+                "description": cat["summary"],
                 "benchmarks": [b["id"] for b in cat_benchmarks],
                 "benchmark_details": cat_benchmarks,
                 "candidates": [],
