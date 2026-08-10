@@ -166,6 +166,18 @@ jobs:
       - name: Helm lint
         run: helm lint ./chart
 
+      - name: Clear stuck Helm lock
+        run: |
+          set -euo pipefail
+          status="$(helm -n "$NAMESPACE" status "$RELEASE" -o json 2>/dev/null | jq -r '.info.status // empty' || true)"
+          echo "helm status=${status:-unknown}"
+          case "$status" in
+            pending-upgrade|pending-install|pending-rollback)
+              echo "Clearing stuck ${status} via rollback"
+              helm -n "$NAMESPACE" rollback "$RELEASE" --wait --timeout 5m
+              ;;
+          esac
+
       - name: Deploy with Helm
         env:
           RANKS_DB_PASSWORD: ${{ secrets.RANKS_DB_PASSWORD }}
@@ -177,6 +189,7 @@ jobs:
             --namespace "$NAMESPACE" \
             --create-namespace \
             --set ranks.scraperCron.enabled=true \
+            --set ranks.ingress.className=haproxy \
             --set ranks.api.image.repository="${REGISTRY}/${IMAGE_OWNER}/ranks-api" \
             --set ranks.api.image.tag="$IMAGE_TAG" \
             --set ranks.api.image.pullPolicy=Always \
