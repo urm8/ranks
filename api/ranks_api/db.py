@@ -105,6 +105,19 @@ def _normalize_payload(data: Any, generated_at: datetime | None) -> dict[str, An
     return data
 
 
+def fetch_latest_generated_at(session: Session) -> datetime | None:
+    stmt = (
+        select(ranks_snapshots.c.generated_at)
+        .order_by(ranks_snapshots.c.generated_at.desc())
+        .limit(1)
+    )
+    try:
+        row = session.execute(stmt).one_or_none()
+    except Exception as exc:  # noqa: BLE001
+        raise RuntimeError(f"snapshot query failed: {exc}") from exc
+    return None if row is None else row[0]
+
+
 def fetch_latest_snapshot(session: Session) -> dict[str, Any] | None:
     """Return the newest ranks_snapshots.data payload, or None if the table is empty."""
     stmt = (

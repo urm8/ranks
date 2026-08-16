@@ -1,29 +1,61 @@
 <script lang="ts">
-  import {
-    rowLabel,
-    rowScore,
-    sortByPerformance,
-    type RankRow,
-  } from "./types";
+  import { iterateRankings } from "./rankings";
+  import { rowKey, rowLabel, rowScore, type RankRow } from "./types";
 
   const TOP_VISIBLE = 5;
 
   let {
     rows = [],
+    total = 0,
+    nextCursor = null,
+    listId = "",
     metricLabel = "Score",
   }: {
     rows?: RankRow[];
+    total?: number;
+    nextCursor?: string | null;
+    listId?: string;
     metricLabel?: string;
   } = $props();
 
   let expanded = $state(false);
+  let loadingMore = $state(false);
+  let loadError = $state<string | null>(null);
+  let extra = $state.raw<RankRow[]>([]);
+  let fetchedCursor = $state<string | null | undefined>(undefined);
 
-  const sorted = $derived(sortByPerformance(rows));
-  const hidden = $derived(Math.max(0, sorted.length - TOP_VISIBLE));
-  const visible = $derived(expanded ? sorted : sorted.slice(0, TOP_VISIBLE));
+  const loaded = $derived([...rows, ...extra]);
+  const cursor = $derived(fetchedCursor === undefined ? nextCursor : fetchedCursor);
+  const hidden = $derived(Math.max(0, total - TOP_VISIBLE));
+  const visible = $derived(expanded ? loaded : loaded.slice(0, TOP_VISIBLE));
+
+  async function loadRemaining() {
+    if (!listId || cursor == null || loadingMore) return;
+    loadingMore = true;
+    loadError = null;
+    try {
+      for await (const page of iterateRankings(listId, cursor)) {
+        extra = [...extra, ...page.items];
+        fetchedCursor = page.next_cursor;
+      }
+    } catch (err) {
+      loadError = err instanceof Error ? err.message : String(err);
+    } finally {
+      loadingMore = false;
+    }
+  }
+
+  async function toggle() {
+    if (expanded) {
+      expanded = false;
+      return;
+    }
+    expanded = true;
+    await loadRemaining();
+  }
 </script>
 
-{#if sorted.length === 0}
+{#if loaded.length === 0}
   <p class="text-sm text-muted">No rankings yet.</p>
 {:else}
   <div class="overflow-x-auto border border-line bg-panel">
@@ -37,7 +69,7 @@
         </tr>
       </thead>
       <tbody>
-        {#each visible as row, index (row.id ?? row.model_id ?? `${rowLabel(row)}-${index}`)}
+        {#each visible as row, index (rowKey(row, index))}
           <tr class="border-b border-line/80 last:border-0">
             <td class="px-3 py-2.5 font-semibold text-rank tabular-nums">
               {row.rank ?? index + 1}
@@ -59,15 +91,29 @@
   {#if hidden > 0}
     <button
       type="button"
-      class="mt-3 border border-line bg-panel px-3 py-2 text-sm font-medium text-ink transition hover:border-ink"
-      onclick={() => (expanded = !expanded)}
+      class="mt-3 border border-line bg-panel px-3 py-2 text-sm font-medium text-ink transition hover:border-ink disabled:opacity-60"
+      onclick={() => void toggle()}
+      disabled={loadingMore}
       data-expand-toggle
     >
-      {#if expanded}
+      {#if expanded && loadingMore}
+        Loading {loaded.length} of {total}…
+      {:else if expanded}
         Show top {TOP_VISIBLE}
       {:else}
-        Show all {sorted.length} (+{hidden} more)
+        Show all {total} (+{hidden} more)
       {/if}
+    </button>
+  {/if}
+
+  {#if loadError}
+    <p class="mt-2 text-sm text-muted">Could not load more: {loadError}</p>
+    <button
+      type="button"
+      class="mt-2 border border-line px-3 py-1.5 text-sm font-medium hover:border-ink"
+      onclick={() => void loadRemaining()}
+    >
+      Retry
     </button>
   {/if}
 {/if}

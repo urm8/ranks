@@ -20,5 +20,8 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["ranks_api"]
 
+[dependency-groups]
+dev = ["pytest>=8"]
+
 [tool.uv]
 package = true

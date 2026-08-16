@@ -15,22 +15,33 @@ export type RankRow = {
   context?: number | null;
 };
 
+export type RankPage = {
+  list?: string;
+  items: RankRow[];
+  total: number;
+  next_cursor: string | null;
+};
+
 export type Benchmark = {
   id?: string;
   name?: string;
   url?: string;
   category?: string;
+  list?: string;
   rankings?: RankRow[];
+  rankings_total?: number;
+  next_cursor?: string | null;
 };
 
 export type Category = {
   id?: string;
   name?: string;
   description?: string;
+  list?: string;
   quality_ranked?: RankRow[];
-  value_ranked?: RankRow[];
-  benchmarks?: Benchmark[];
-  benchmark_details?: Benchmark[];
+  quality_total?: number;
+  next_cursor?: string | null;
+  benchmarks?: Array<{ id?: string; name?: string }>;
 };
 
 export type Source = {
@@ -56,10 +67,11 @@ export type EmergingModel = {
 export type Snapshot = {
   generated_at?: string;
   sources?: Source[];
-  models?: Record<string, unknown> | unknown[];
+  model_count?: number;
   benchmarks?: Benchmark[];
   categories?: Category[];
   emerging_models?: EmergingModel[];
+  emerging_total?: number;
 };
 
 export function rowLabel(row: RankRow): string {
@@ -75,18 +87,6 @@ export function rowScore(row: RankRow): string {
   return String(raw);
 }
 
-export function sortByPerformance(rows: RankRow[]): RankRow[] {
-  return [...rows].sort((a, b) => {
-    const aq = typeof a.quality === "number" ? a.quality : null;
-    const bq = typeof b.quality === "number" ? b.quality : null;
-    if (aq != null && bq != null) return bq - aq;
-
-    const as = typeof a.score === "number" ? a.score : Number(a.score);
-    const bs = typeof b.score === "number" ? b.score : Number(b.score);
-    if (Number.isFinite(as) && Number.isFinite(bs)) return bs - as;
-
-    const ar = typeof a.rank === "number" ? a.rank : Number.POSITIVE_INFINITY;
-    const br = typeof b.rank === "number" ? b.rank : Number.POSITIVE_INFINITY;
-    return ar - br;
-  });
+export function rowKey(row: RankRow, index: number): string {
+  return row.model_id || row.id || `${rowLabel(row)}-${index}`;
 }

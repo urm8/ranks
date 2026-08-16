@@ -1,9 +1,10 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import ExpandableRankList from "./lib/ExpandableRankList.svelte";
+  import { readSnapshotCache, writeSnapshotCache } from "./lib/snapshotCache";
   import type { Snapshot } from "./lib/types";
 
-  let data = $state<Snapshot | null>(null);
+  let data = $state.raw<Snapshot | null>(null);
   let error = $state<string | null>(null);
   let loading = $state(true);
 
@@ -11,33 +12,33 @@
   const benchmarks = $derived(data?.benchmarks ?? []);
   const sources = $derived(data?.sources ?? []);
   const emerging = $derived(data?.emerging_models ?? []);
-  const modelCount = $derived.by(() => {
-    const models = data?.models;
-    if (!models) return 0;
-    return Array.isArray(models) ? models.length : Object.keys(models).length;
-  });
+  const modelCount = $derived(data?.model_count ?? 0);
 
   async function load() {
-    loading = true;
     error = null;
     try {
       const res = await fetch("/api/data");
       if (!res.ok) throw new Error(`API ${res.status}`);
-      data = (await res.json()) as Snapshot;
+      const next = (await res.json()) as Snapshot;
+      data = next;
+      writeSnapshotCache(next);
     } catch (err) {
-      error = err instanceof Error ? err.message : String(err);
+      if (data == null) {
+        error = err instanceof Error ? err.message : String(err);
+      }
     } finally {
       loading = false;
     }
   }
 
   onMount(() => {
+    const cached = readSnapshotCache();
+    if (cached) {
+      data = cached;
+      loading = false;
+    }
     void load();
   });
-
-  function categoryBenchmarks(cat: NonNullable<Snapshot["categories"]>[number]) {
-    return cat.benchmark_details ?? cat.benchmarks ?? [];
-  }
 </script>
 
 <div class="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
@@ -48,7 +49,7 @@
     </h1>
     <p class="mt-3 max-w-2xl text-base leading-relaxed text-muted">
       Live snapshot from Postgres — categories, benchmarks, and prices. Lists show
-      the top 5 by performance; expand to see the rest.
+      the top 5 by performance; expand to load the rest in chunks.
     </p>
     <p class="mt-2 text-sm text-muted">
       Refreshed
@@ -101,7 +102,7 @@
 
     <section id="categories" class="mt-12 scroll-mt-6">
       <h2 class="font-display text-3xl font-semibold tracking-tight">Categories</h2>
-      <p class="mt-2 text-sm text-muted">Quality-ranked models per workload, sorted by performance.</p>
+      <p class="mt-2 text-sm text-muted">Quality-ranked models per workload. Benchmark tables live once in the section below.</p>
 
       {#each categories as cat (cat.id ?? cat.name)}
         <article class="mt-8 border-t border-line pt-8">
@@ -110,25 +111,26 @@
             <p class="mt-1 max-w-2xl text-sm text-muted">{cat.description}</p>
           {/if}
           <div class="mt-4">
-            <ExpandableRankList rows={cat.quality_ranked ?? []} metricLabel="Quality" />
+            {#key cat.list}
+              <ExpandableRankList
+                rows={cat.quality_ranked ?? []}
+                total={cat.quality_total ?? cat.quality_ranked?.length ?? 0}
+                nextCursor={cat.next_cursor ?? null}
+                listId={cat.list ?? ""}
+                metricLabel="Quality"
+              />
+            {/key}
           </div>
-
-          {#if categoryBenchmarks(cat).length}
-            <div class="mt-6 grid gap-4 md:grid-cols-2">
-              {#each categoryBenchmarks(cat) as bench (bench.id ?? bench.name)}
-                <div class="border border-line bg-panel p-4">
-                  <div class="flex items-baseline justify-between gap-3">
-                    <h4 class="font-medium">{bench.name ?? bench.id}</h4>
-                    {#if bench.url}
-                      <a class="text-xs text-accent underline-offset-2 hover:underline" href={bench.url} target="_blank" rel="noreferrer">source</a>
-                    {/if}
-                  </div>
-                  <div class="mt-3">
-                    <ExpandableRankList rows={bench.rankings ?? []} />
-                  </div>
-                </div>
+          {#if cat.benchmarks?.length}
+            <ul class="mt-4 flex flex-wrap gap-2 text-sm">
+              {#each cat.benchmarks as bench (bench.id ?? bench.name)}
+                <li>
+                  <a class="border border-line bg-panel px-3 py-1.5 hover:border-ink" href={`#bench-${bench.id}`}>
+                    {bench.name ?? bench.id}
+                  </a>
+                </li>
               {/each}
-            </div>
+            </ul>
           {/if}
         </article>
       {:else}
@@ -138,10 +140,10 @@
 
     <section id="benchmarks" class="mt-16 scroll-mt-6">
       <h2 class="font-display text-3xl font-semibold tracking-tight">All benchmarks</h2>
-      <p class="mt-2 text-sm text-muted">Flat list from the snapshot, top 5 expanded on demand.</p>
+      <p class="mt-2 text-sm text-muted">Each leaderboard is listed once. Expand to page through the rest.</p>
       <div class="mt-6 grid gap-4 md:grid-cols-2">
         {#each benchmarks as bench (bench.id ?? bench.name)}
-          <div class="border border-line bg-panel p-4">
+          <div class="border border-line bg-panel p-4" id={`bench-${bench.id}`}>
             <div class="flex items-baseline justify-between gap-3">
               <h3 class="font-medium">{bench.name ?? bench.id}</h3>
               {#if bench.url}
@@ -149,7 +151,14 @@
               {/if}
             </div>
             <div class="mt-3">
-              <ExpandableRankList rows={bench.rankings ?? []} />
+              {#key bench.list}
+                <ExpandableRankList
+                  rows={bench.rankings ?? []}
+                  total={bench.rankings_total ?? bench.rankings?.length ?? 0}
+                  nextCursor={bench.next_cursor ?? null}
+                  listId={bench.list ?? ""}
+                />
+              {/key}
             </div>
           </div>
         {:else}
@@ -173,7 +182,7 @@
               </tr>
             </thead>
             <tbody>
-              {#each emerging.slice(0, 24) as m (m.id ?? m.name)}
+              {#each emerging as m (m.id ?? m.name)}
                 <tr class="border-b border-line/80 last:border-0">
                   <td class="px-3 py-2.5 font-medium">{m.name ?? m.id}</td>
                   <td class="px-3 py-2.5 text-muted">{m.vendor ?? ""}</td>
